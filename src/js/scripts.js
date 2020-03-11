@@ -3,8 +3,14 @@ let input = document.getElementById("ville");
 let selectCont = document.getElementById("continent");
 let selectPays = document.getElementById("pays");
 
+
 input.addEventListener('input', function() {
-	maRequeteAJAX(input.value);
+	if (input.value.length > 1) {
+		maRequeteAJAX(input.value);
+	}
+	if (input.value.length === 0) {
+		videVilles();
+	}
 });
 
 div_autocp.addEventListener('click', function() {
@@ -16,6 +22,7 @@ div_autocp.addEventListener('click', function() {
 
 document.addEventListener("DOMContentLoaded", function() {
 	chargerSelecteurContinents();
+	div_autocp.style.borderWidth = "0px";
 });
 
 selectCont.addEventListener("change", function() {
@@ -31,21 +38,25 @@ function afficheVilles(tableau) {
 		ville.innerHTML = tableau[i];
 		div_autocp.appendChild(ville);
 	}
+	div_autocp.style.borderWidth = "1px";
 }
 
 function videVilles() {
 	while (div_autocp.children.length > 0) {
 		div_autocp.removeChild(div_autocp.children[0]);
 	}
+	div_autocp.style.borderWidth = "0px";
 }
 
 
-function requeteAJAX(stringVille,callback) {
+function requeteAJAX(stringVille,callback,startLoadingAction,endLoadingAction) {
 	let url = "php/requeteVille.php?ville=" + stringVille;
 	let requete = new XMLHttpRequest();
 	requete.open("GET", url, true);
+	startLoadingAction();
 	requete.addEventListener("load", function () {
 		callback(requete);
+		endLoadingAction();
 	});
 	requete.send(null);
 }
@@ -78,7 +89,13 @@ function callback_4(req) {
 }
 
 function maRequeteAJAX(ville) {
-	requeteAJAX(ville, callback_4);
+	requeteAJAX(ville, callback_4, function() {
+		let gif = document.getElementById("loading");
+		gif.style.visibility = "visible";
+	}, function() {
+		let gif = document.getElementById("loading");
+		gif.style.visibility = "hidden";
+	});
 }
 
 function chargerSelecteurContinents() {
