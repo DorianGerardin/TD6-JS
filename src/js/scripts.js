@@ -1,4 +1,15 @@
 let div_autocp = document.getElementById("autocompletion");
+let input = document.getElementById("ville");
+
+input.addEventListener('input', function() {
+	maRequeteAJAX(input.value);
+});
+
+div_autocp.addEventListener('click', function() {
+	console.log(event.target.innerHTML);
+	input.value = event.target.innerHTML;
+	videVilles();
+});
 
 function afficheVilles(tableau) {
 	if (div_autocp.children.length > 0) {
