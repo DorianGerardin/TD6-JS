@@ -16,3 +16,45 @@ function videVilles() {
 		div_autocp.removeChild(div_autocp.children[i]);
 	}
 }
+
+
+function requeteAJAX(stringVille,callback) {
+	let url = "php/requeteVille.php?ville=" + stringVille;
+	let requete = new XMLHttpRequest();
+	requete.open("GET", url, true);
+	requete.addEventListener("load", function () {
+		callback(requete);
+	});
+	requete.send(null);
+}
+
+function callback_1(req) {
+	console.log(req);
+}
+
+function callback_2(req) {
+	let xhrJSON = JSON.parse(req.responseText);
+	console.log(xhrJSON);
+}
+
+function callback_3(req) {
+	let xhrJSON = JSON.parse(req.responseText);
+	let tabName = new Array;
+	for (var i = 0; i < xhrJSON.length; i++) {
+		tabName.push(xhrJSON[i].name);
+	}
+	console.log(tabName);
+}
+
+function callback_4(req) {
+	let xhrJSON = JSON.parse(req.responseText);
+	let tabName = new Array;
+	for (var i = 0; i < xhrJSON.length; i++) {
+		tabName.push(xhrJSON[i].name);
+	}
+	afficheVilles(tabName);
+}
+
+function maRequeteAJAX(ville) {
+	requeteAJAX(ville, callback_4);
+}

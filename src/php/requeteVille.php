@@ -11,11 +11,9 @@ $ville = $_GET["ville"];
 // récupération du résultat de la requête SQL
 $tab = Model::selectByName($ville);
 
-echo json_encode($tab);
-
 // délai fictif
-// sleep(1);
+sleep(1);
 
 // affichage en format JSON du résultat précédent
-// ...
+echo json_encode($tab);
 
