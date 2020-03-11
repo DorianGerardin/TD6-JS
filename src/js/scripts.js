@@ -1,5 +1,7 @@
 let div_autocp = document.getElementById("autocompletion");
 let input = document.getElementById("ville");
+let selectCont = document.getElementById("continent");
+let selectPays = document.getElementById("pays");
 
 input.addEventListener('input', function() {
 	maRequeteAJAX(input.value);
@@ -10,6 +12,15 @@ div_autocp.addEventListener('click', function() {
 	input.value = event.target.innerHTML;
 	videVilles();
 });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+	chargerSelecteurContinents();
+});
+
+selectCont.addEventListener("change", function() {
+	chargerSelecteurPays();
+})
 
 function afficheVilles(tableau) {
 	if (div_autocp.children.length > 0) {
@@ -23,8 +34,8 @@ function afficheVilles(tableau) {
 }
 
 function videVilles() {
-	for (var i = div_autocp.children.length - 1; i >= 0; i--) {
-		div_autocp.removeChild(div_autocp.children[i]);
+	while (div_autocp.children.length > 0) {
+		div_autocp.removeChild(div_autocp.children[0]);
 	}
 }
 
@@ -68,4 +79,35 @@ function callback_4(req) {
 
 function maRequeteAJAX(ville) {
 	requeteAJAX(ville, callback_4);
+}
+
+function chargerSelecteurContinents() {
+	let option1 = document.createElement("option");
+	option1.selected = true;
+	option1.disabled = true;
+	option1.innerHTML = "Choisissez un continent";
+	selectCont.appendChild(option1);
+	for (var i = 0; i < Object.keys(countries).length; i++) {
+		let option = document.createElement("option");
+		option.innerHTML = Object.keys(countries)[i];
+		selectCont.appendChild(option);
+	}
+}
+
+function chargerSelecteurPays() {
+
+	selectPays.innerHTML = "";
+
+	let continent = selectCont.value;
+	let pays = countries[continent];
+	let option1 = document.createElement("option");
+	option1.selected = true;
+	option1.disabled = true;
+	option1.innerHTML = "Choisissez un pays";
+	selectPays.appendChild(option1);
+	for (var i = 0; i < pays.length; i++) {
+		let option = document.createElement("option");
+		option.innerHTML = pays[i];
+		selectPays.appendChild(option);
+	}
 }
